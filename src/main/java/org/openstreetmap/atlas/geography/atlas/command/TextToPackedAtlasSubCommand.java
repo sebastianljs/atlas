@@ -1,6 +1,5 @@
 package org.openstreetmap.atlas.geography.atlas.command;
 
-import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,6 +8,7 @@ import java.nio.file.Paths;
 import org.openstreetmap.atlas.exception.CoreException;
 import org.openstreetmap.atlas.geography.atlas.builder.text.TextAtlasBuilder;
 import org.openstreetmap.atlas.streaming.resource.File;
+import org.openstreetmap.atlas.utilities.files.FileDirectoryManager;
 import org.openstreetmap.atlas.utilities.runtime.Command.Optionality;
 import org.openstreetmap.atlas.utilities.runtime.Command.Switch;
 import org.openstreetmap.atlas.utilities.runtime.Command.SwitchList;
@@ -78,18 +78,6 @@ public class TextToPackedAtlasSubCommand implements FlexibleSubCommand
             throw new CoreException("{} is not a readable file", this.inputPath);
         }
 
-        try
-        {
-            if (Files.isDirectory(this.outputPath))
-            {
-                throw new CoreException("{} is a directory.  Aborting", this.outputPath);
-            }
-            Files.createDirectories(this.outputPath.getParent());
-        }
-        catch (final IOException oops)
-        {
-            throw new CoreException("Error when creating directories {}",
-                    this.outputPath.getParent(), oops);
-        }
+        FileDirectoryManager.createAndCheckIsDirectory(this.outputPath);
     }
 }

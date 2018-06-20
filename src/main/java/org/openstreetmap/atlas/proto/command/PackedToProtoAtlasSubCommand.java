@@ -1,6 +1,5 @@
 package org.openstreetmap.atlas.proto.command;
 
-import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,6 +8,7 @@ import java.nio.file.Paths;
 import org.openstreetmap.atlas.exception.CoreException;
 import org.openstreetmap.atlas.geography.atlas.packed.PackedAtlas;
 import org.openstreetmap.atlas.streaming.resource.File;
+import org.openstreetmap.atlas.utilities.files.FileDirectoryManager;
 import org.openstreetmap.atlas.utilities.runtime.Command.Optionality;
 import org.openstreetmap.atlas.utilities.runtime.Command.Switch;
 import org.openstreetmap.atlas.utilities.runtime.Command.SwitchList;
@@ -26,7 +26,6 @@ public class PackedToProtoAtlasSubCommand implements FlexibleSubCommand
     private static final String DESCRIPTION = "converts a packed atlas to a naive proto-based atlas";
     private static final String PACKED_SWITCH_TEXT = "packed-atlas";
     private static final String PROTO_SWITCH_TEXT = "proto-atlas";
-
     private static final Switch<Path> INPUT_PARAMETER = new Switch<>(PACKED_SWITCH_TEXT,
             "Input atlas data in text atlas format", Paths::get, Optionality.REQUIRED);
 
@@ -80,18 +79,6 @@ public class PackedToProtoAtlasSubCommand implements FlexibleSubCommand
             throw new CoreException("{} is not a readable file", this.inputPath);
         }
 
-        try
-        {
-            if (Files.isDirectory(this.outputPath))
-            {
-                throw new CoreException("{} is a directory.  Aborting", this.outputPath);
-            }
-            Files.createDirectories(this.outputPath.getParent());
-        }
-        catch (final IOException exception)
-        {
-            throw new CoreException("Error when creating directories {}",
-                    this.outputPath.getParent(), exception);
-        }
+        FileDirectoryManager.createAndCheckIsDirectory(this.outputPath);
     }
 }
