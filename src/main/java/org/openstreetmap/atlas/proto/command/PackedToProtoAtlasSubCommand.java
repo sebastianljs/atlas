@@ -79,6 +79,6 @@ public class PackedToProtoAtlasSubCommand implements FlexibleSubCommand
             throw new CoreException("{} is not a readable file", this.inputPath);
         }
 
-        FileDirectoryManager.createAndCheckIsDirectory(this.outputPath);
+        FileDirectoryManager.checkIsAndCreateDirectory(this.outputPath);
     }
 }

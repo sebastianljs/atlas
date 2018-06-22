@@ -7,7 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class FileDirectoryManager {
-    public static void createAndCheckIsDirectory(Path outputPath) {
+    public static void checkIsAndCreateDirectory(Path outputPath) {
         try
         {
             if (Files.isDirectory(outputPath))
